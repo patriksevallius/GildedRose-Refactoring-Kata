@@ -29,10 +29,16 @@ class Item:
     def update_quality(self):
         self.sell_in -= 1
         if self.sell_in < 0:
-            if self.quality > 0:
-                self.quality -= 1
+            self.decrement_quality()
+        self.decrement_quality()
+
+    def decrement_quality(self):
         if self.quality > 0:
             self.quality -= 1
+
+    def increase_quality(self):
+        if self.quality < 50:
+            self.quality += 1
 
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
@@ -41,10 +47,9 @@ class Item:
 class BrieItem(Item):
     def update_quality(self):
         self.sell_in -= 1
-        if self.quality < 50:
-            self.quality += 1
-        if self.sell_in < 0 and self.quality < 50:
-            self.quality += 1
+        self.increase_quality()
+        if self.sell_in < 0:
+            self.increase_quality()
 
 
 class BackstageItem(Item):
@@ -53,12 +58,11 @@ class BackstageItem(Item):
         if self.sell_in < 0:
             self.quality = 0
         else:
-            if self.quality < 50:
-                self.quality += 1
-            if self.sell_in < 10 and self.quality < 50:
-                self.quality += 1
-            if self.sell_in < 5 and self.quality < 50:
-                self.quality += 1
+            self.increase_quality()
+            if self.sell_in < 10:
+                self.increase_quality()
+            if self.sell_in < 5:
+                self.increase_quality()
 
 
 class SulfurasItem(Item):
